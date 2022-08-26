@@ -7,12 +7,17 @@ const id= params.get("_id")
 //--------------------------------------------------------------------------
 // Récupération des produits de l'api et traitement des données (voir script.js)
 //-------------------------------------------------------
-fetch("http://localhost:3000/api/products")
-    .then((data) => data.json())
-    .then((objetProduits) => {
-        lesProduits(objetProduits);
-    })
+    fetch("http://localhost:3000/api/products")
+        .then((res) => res.json())
+        .then((objetProduits) => {
+            console.log(objetProduits);
 
+            lesProduits(objetProduits);
+        })
+        .catch((err) => {
+            document.querySelector("#cartAndFormContainer").innerHTML = "<h1>erreur 404</h1>";
+            console.log("erreur 404, sur ressource api: " + err);
+        });
 
 let articleClient = {};
 articleClient._id = id;
