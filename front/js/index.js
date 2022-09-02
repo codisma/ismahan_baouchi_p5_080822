@@ -2,16 +2,16 @@
 // récupération des produits de l'API
 //----------------------------------------
 
-    fetch("http://localhost:3000/api/products")
-        .then((res) => res.json())
-        .then((objetProduits) => {
-            console.log(objetProduits);
-            lesKanaps(objetProduits);
-        })
-        .catch((err) => {
-            document.querySelector("#cartAndFormContainer").innerHTML = "<h1>erreur 404</h1>";
-            console.log("erreur 404, sur ressource api: " + err);
-        });
+fetch("http://localhost:3000/api/products")
+    .then((res) => res.json())
+    .then((objetProduits) => {
+        console.log(objetProduits);
+        lesKanaps(objetProduits);
+    })
+    .catch((err) => {
+        document.querySelector("#cartAndFormContainer").innerHTML = "<h1>erreur 404</h1>";
+        console.log("erreur 404, sur ressource api: " + err);
+    });
 //--------------------------------------------
 // fonction d'affichage des produits de l'api sur la page index
 //----------------------------------------------------------------------
@@ -25,6 +25,6 @@ function lesKanaps(index) {
                                     <p class="productDescription">${article.description}</p>
                                     </article>
                                     </a>`;
-                                }
-                            }
+    }
+}
 
