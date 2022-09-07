@@ -18,7 +18,7 @@ fetch("http://localhost:3000/api/products/"+ id)
     });
 
 let articleClient = {};
-articleClient._id = id;
+articleClient.id = id;
 
 
 // fonction d'affichage du produit de l'api
@@ -30,34 +30,36 @@ function lesProduits(produit) {
     let couleurOption = document.querySelector("#colors")
 
     imageAlt.innerHTML = `<img src ="${produit.imageUrl}" alt= "${produit.altTxt}">`
-    titre.textContent = `${produit.name}`;
-    prix.textContent = `${produit.price}`;
-    description.textContent = `${produit.description}`;
+    titre.textContent = produit.name;
+    prix.textContent = produit.price;
+    description.textContent = produit.description;
     for (let couleur of produit.colors) {
-        couleurOption.innerHTML += `<option value="${couleur}">${couleur}</option>`;
+        couleurOption.innerHTML += `<option value="${couleur}" > ${couleur} </option>`;
     }
 
 }
 
 let choixProduit = document.querySelector("#addToCart");
-choixProduit.addEventListener("click", () => {
+    choixProduit.addEventListener("click", async () => {  //on met async pour tuiliser await sur addPanier
 
-    let choixQuantite = document.querySelector("#quantity").value;
-    let choixCouleur = document.querySelector("#colors").value;
-    if (
-        choixQuantite < 1 ||
-        choixQuantite > 100 ||
-        choixQuantite === undefined ||
-        choixCouleur === "" ||
-        choixCouleur === undefined
-    ) {
-        // active alert
-        alert("pour valider le chois de cet article, veuillez renseigner une couleur, et /ou une quantité valide entre 1 et 100")
-    } else {
-        articleClient.quantite = choix.Quantite;
-        articleClient.couleur = choix.Couleur;
-        // montre panier 
-        savePanier();
-        console.log("clic effectué")
-}
-})
+        let choixQuantite = document.querySelector("#quantity").value;
+        let choixCouleur = document.querySelector("#colors").value;
+        if (
+            choixQuantite < 1 ||
+            choixQuantite > 100 ||
+            choixQuantite === undefined ||
+            choixCouleur === "" ||
+            choixCouleur === undefined
+        ) {
+            // active alert
+            alert("pour valider le chois de cet article, veuillez renseigner une couleur, et /ou une quantité valide entre 1 et 100")
+        } else {
+            articleClient.quantite = parseInt(choixQuantite);
+            articleClient.couleur = choixCouleur;
+            // montre panier 
+            await addPanier(articleClient);
+            alert("l'article a bien été ajouté au panier");
+            window.location.assign("cart.html")
+    }
+    })
+    

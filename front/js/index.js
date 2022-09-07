@@ -6,8 +6,8 @@ fetch("http://localhost:3000/api/products")
     .then((res) => res.json())
     .then((objetProduits) => {
         console.log(objetProduits);
-        lesKanaps(objetProduits);
-    })
+        afficherProduitsInnerHtml(objetProduits);
+    })``
     .catch((err) => {
         document.querySelector("#cartAndFormContainer").innerHTML = "<h1>erreur 404</h1>";
         console.log("erreur 404, sur ressource api: " + err);
@@ -15,10 +15,12 @@ fetch("http://localhost:3000/api/products")
 //--------------------------------------------
 // fonction d'affichage des produits de l'api sur la page index
 //----------------------------------------------------------------------
-function lesKanaps(index) {
+//affichage des produits version innerHtml
+function afficherProduitsInnerHtml(produits) {
     let zoneArticle = document.querySelector("#items");
-    for (let article of index) {
-        zoneArticle.innerHTML += `<a href="./product.html?_id=${article._id}">
+    let contenu = "";
+    for (let article of produits) {
+        contenu += `<a href="./product.html?_id=${article._id}">
                                     <article>
                                     <img src="${article.imageUrl}" alt="${article.altTxt}">
                                     <h3 class="productName">${article.name}</h3>
@@ -26,5 +28,37 @@ function lesKanaps(index) {
                                     </article>
                                     </a>`;
     }
+    zoneArticle.innerHTML = contenu;
 }
 
+
+//affichage des produits version createElement
+function afficherProduitsCreateElement(produits) {
+    for (let article of produits) {
+        let productLink = document.createElement("a");
+        productLink.href = './product.html?id=' + article._id;
+
+        let productArticle = document.createElement("article");
+
+        let productImg = document.createElement("img");
+        productImg.src = article.imageUrl;
+        productImg.alt = article.altTxt;
+
+        let productTitle = document.createElement("h3");
+        productTitle.classList.add("productName");
+        productTitle.innerText = article.name;
+
+        let productText = document.createElement("p");
+        productText.classList.add("ProductDescription");
+        productText.innerHTML = article.description;
+
+        productArticle.appendChild(productImg);
+        productArticle.appendChild(productText);
+        productArticle.appendChild(productTitle);
+        productLink.appendChild(productArticle);
+        
+        document.getElementById("items").appendChild(productLink);
+
+    }
+
+}

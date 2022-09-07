@@ -17,7 +17,7 @@ function addPanier(produit) {
     let panier = getPanier()
     let foundProduit = panier.find(p => p.id == produit.id) && panier.find(p => p.color == produit.color)
     if (foundProduit != undefined) {
-        foundProduit.quantity += produit.quantity
+        foundProduit.quantite += produit.quantite
     } else {
         panier.push(produit)
     }
