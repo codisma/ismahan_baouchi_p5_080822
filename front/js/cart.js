@@ -1,75 +1,132 @@
+// récupération du LocalStorage
+let localPanier = JSON.parse(localStorage.getItem("panier"));
 
-const page = document.location.href;
+//recupération de l'API
+function getProduitById(id) {
+    console.log(id);
+    return fetch(`http://localhost:3000/api/products/${id}`)
+        .then(function(res) {
+            return res.json();
+        })
+        .catch((err) => {
+            //une erreur est survenue
+            document.querySelector("#cartAndFormContainer").innerHTML = "<h1>erreur 404</h1>";
+            console.log("erreur 404, sur ressource api: " + err);
+        })
+        .then(function(response) {
+            return response;
+        })
+    };
 
-//----------------------------------------------------------------
-// Récupération des produits de l'api
-//----------------------------------------------------------------
-// appel de la ressource api product (voir script.js) si on est sur la page panier
-if (page.match("cart")) {
-fetch("http://localhost:3000/api/products/")
-    .then((res) => res.json())
-    .then((objetProduits) => {
-        console.log(objetProduits);
-      // appel de la fonction affichagePanier
-        affichagePanier(objetProduits);
-})
-} else {
-    console.log("sur page confirmation");
+async function affichageProduit() {
+    const panierCart = document.getElementById("cart__items");
+    let panierHtml = [];
+    //Si panier vide alors crée un tableau
+    if (localPanier === null || localPanier == 0) {
+        panierCart.textContent = "Pas de Kanap dans le panier";
+    } else {
+        //Si panier pas vide alors rajoute un produit
+        for (i = 0; i < localPanier.length; i++) {
+            const produit = await getProduitById(localPanier[i].id);
+            const prixTotal = (produit.price *= localPanier[i].quantite);
+            panierHtml += `
+                <article class="cart__item" data-id=${localPanier[i].id}>
+                <div class="cart__item__img">
+                    <img src=${produit.imageUrl} alt=${produit.altTxt}>
+                </div>
+                <div class="cart__item__content">
+                    <div class="cart__item__content__description">
+                        <h2>${produit.name}</h2>
+                        <p>${localPanier[i].couleur}</p>
+                        <p>${prixTotal}€</p>
+                    </div>
+                    <div class="cart__item__content__settings">
+                        <div class="cart__item__content__settings__quantity">
+                            <p>Qté : </p>
+                            <input data-id=${localPanier[i].id}  data-color=${localPanier[i].couleur} type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value=${localPanier[i].quantite}>
+                        </div>
+                        <div class="cart__item__content__settings__delete">
+                            <p data-id=${localPanier[i].id}  data-color=${localPanier[i].couleur} class="deleteItem">Supprimer</p>
+                        </div>
+                    </div>
+                </div>
+                </article>`;
+        }
+        panierCart.insertAdjacentHTML("beforeend", panierHtml);
+
+        //Prix total du panier
+        let quantityTotal = 0;
+        let panierTotal = 0;
+
+        for(i = 0; i < localPanier.length; i++) {
+            const kanap = await getProduitById(localPanier[i].id);
+            quantityTotal += parseInt(localPanier[i].quantite);
+            panierTotal += parseInt(kanap.price * localPanier[i].quantite);
+        };
+
+        document.getElementById('totalQuantity').innerHTML = quantityTotal;
+        document.getElementById('totalPrice').innerHTML = panierTotal;
+        addQuantity();
+        deleteProduct();
+    }
+    
+}
+    affichageProduit();
+
+
+function addQuantity() {
+    let itemQuantity = document.querySelector(".itemQuantity");
+
+    for (i= 0; i < itemQuantity.length; i++) {
+        let input = itemQuantity[i];
+        input.addEventListener("change",(event)=> {
+            let input = event.target;
+            if (input.value <= 0) {
+                alert("Il n'est pas possible d'avoir moins de zéro kanap. Veuillez supprimer le Kanap");
+                location.reload();
+            } else {
+                localPanier[i].quantite = parseInt(input.value);
+                localStorage.setItem("panier", JSON.stringify(localPanier));
+                affichageProduit();
+            }
+        })
+    }
+}
+function deleteProduct() {
+    let deleteBtn = document.querySelectorAll(".deleteItem");
+
+    for (let d = 0; d < deleteBtn.length; d++) {
+        deleteBtn[d].addEventListener("click", (event) => {
+            event.preventDefault();
+            let buttonClick = event.target;
+            buttonClick.parentElement.parentElement.parentElement.parentElement.remove();
+
+            //suppression dans le lS
+            localPanier.splice(d, 1);
+            localStorage.setItem("panier", JSON.stringify(localPanier));
+
+            location.reload();
+            affichageProduit();
+        })
+    }
+}
+function totalProduit() {
+    // déclaration variable en tant que nombre
+    let totalArticle = 0;
+    // déclaration variable en tant que nombre
+    let totalPrix = 0;
+    // on pointe l'élément
+    const cart = document.querySelector(".cart__item");
+    // pour chaque élément cart
+    cart.forEach((cart) => {
+      //je récupère les quantités des produits grâce au dataset
+    totalArticle += JSON.parse(cart.dataset.quantite);
+      // je créais un opérateur pour le total produit grâce au dataset
+      totalPrix += cart.dataset.quantite * cart.dataset.prix;
+    });
+    // je pointe l'endroit d'affichage nombre d'article
+    document.getElementById("totalQuantity").textContent = totalArticle;
+    // je pointe l'endroit d'affichage du prix total
+    document.getElementById("totalPrice").textContent = totalPrix;
 }
 
-
-function affichagePanier(index) {
-    // on déclare et on pointe la zone d'affichage
-    let zonePanier = document.querySelector("#cart__items");
-    // on créait les affichages des produits du panier via un map et introduction de dataset dans le code
-    for (let choix of index)  {zonePanier.innerHTML +=
-    `<article class="cart__item" data-id="${choix._id}" data-couleur="${choix.colors}" data-quantité="${choix.Quantite}" data-prix="${choix.price}"> 
-        <div class="cart__item__img">
-        <img src="${choix.imageUrl}" alt="${choix.alt}">
-        </div>
-        <div class="cart__item__content">
-        <div class="cart__item__content__titlePrice">
-            <h2>${choix.name}</h2>
-            <span>couleur : ${choix.colors}</span>
-            <p data-prix="${choix.price}">${choix.price} €</p>
-        </div>
-        <div class="cart__item__content__settings">
-            <div class="cart__item__content__settings__quantity">
-            <p>Qté : </p>
-            <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${choix.Quantite}">
-            </div>
-            <div class="cart__item__content__settings__delete">
-            <p class="deleteItem" data-id="${choix._id}" data-couleur="${choix.colors}">Supprimer</p>
-            </div>
-        </div>
-        </div>
-    </article>`}
-    }
-
-    function affiche(index) {
-        // on récupère le panier converti
-        let panier = JSON.parse(localStorage.getItem("panierStocke"));
-        // si il y a un panier avec une taille differante de 0 (donc supérieure à 0)
-            if (panier && panier.length != 0) {
-            // zone de correspondance clef/valeur de l'api et du panier grâce à l'id produit choisit dans le localStorage
-            for (let choix of panier) {
-                console.log(choix);
-                for (let g = 0, h = index.length; g < h; g++) {
-                if (choix._id === index[g]._id) {
-                    // création et ajout de valeurs à panier qui vont servir pour les valeurs dataset
-                    choix.name = index[g].name;
-                    choix.prix = index[g].price;
-                    choix.image = index[g].imageUrl;
-                    choix.description = index[g].description;
-                    choix.alt = index[g].altTxt;
-                }
-                }
-            }   affiche(panier);
-        } else {
-          // si il n'y a pas de panier on créait un H1 informatif et quantité appropriées
-            document.querySelector("#totalQuantity").innerHTML = "0";
-            document.querySelector("#totalPrice").innerHTML = "0";
-            document.querySelector("h1").innerHTML =
-                "Vous n'avez pas d'article dans votre panier";
-            }
-        }
