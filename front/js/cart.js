@@ -192,7 +192,7 @@ let regMatchEmail = /^[a-zA-Z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]+@([\w-]+
 //--------------------------------------------------------------
 // Ecoute et attribution de point(pour sécurité du clic) si ces champs sont ok d'après la regex
 //--------------------------------------------------------------
-{
+
     regexTexte.forEach((regexTexte) =>
         regexTexte.addEventListener("input", (e) => {
             // valeur sera la valeur de l'input en dynamique
@@ -229,7 +229,7 @@ let regMatchEmail = /^[a-zA-Z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]+@([\w-]+
     //--------------------------------------------------------------
     // Ecoute et attribution de point(pour sécurité du clic) si ces champs sont ok d'après la regex
     //--------------------------------------------------------------
-    if (page.match("cart")) {
+   
         let regexAdresse = document.querySelector(".regex_adresse");
         regexAdresse.addEventListener("input", (e) => {
             // valeur sera la valeur de l'input en dynamique
@@ -248,7 +248,7 @@ let regMatchEmail = /^[a-zA-Z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]+@([\w-]+
             couleurRegex(regAdresse, valeur, regexAdresse);
             valideClic();
         });
-    }
+    
     //------------------------------------
     // le champ écouté via la regex regexChiffreLettre fera réagir, grâce à texteInfo, la zone concernée
     //------------------------------------
@@ -327,7 +327,7 @@ let regMatchEmail = /^[a-zA-Z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]+@([\w-]+
     // fonction d'affichage individuel des paragraphes sous input sauf pour l'input email
     //--------------------------------------------------------------
     function texteInfo(regex, pointage, zoneEcoute) {
-        if (page.match("cart")) {
+ 
             zoneEcoute.addEventListener("input", (e) => {
                 // valeur sera la valeur de l'input en dynamique
                 valeur = e.target.value;
@@ -347,7 +347,7 @@ let regMatchEmail = /^[a-zA-Z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]+@([\w-]+
                 }
             });
         }
-    }
+    
     //--------------------------------------------------------------
     // Fonction de validation/d'accés au clic du bouton du formulaire
     //--------------------------------------------------------------
@@ -367,15 +367,15 @@ let regMatchEmail = /^[a-zA-Z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]+@([\w-]+
     }
     //----------------------------------------------------------------
     // Envoi de la commande
-    //----------------------------------------------------------------
-    if (page.match("cart")) {
+    //---------------------------------------------------------------
+    
         commande.addEventListener("click", (e) => {
             // empeche de recharger la page on prévient le reload du bouton
             e.preventDefault();
             valideClic();
             envoiPaquet();
         });
-    }
+    
     //----------------------------------------------------------------
     // fonction récupérations des id puis mis dans un tableau
     //----------------------------------------------------------------
@@ -443,4 +443,4 @@ let regMatchEmail = /^[a-zA-Z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]+@([\w-]+
                     alert("erreur");
                 });
         }
-    };
+    }
