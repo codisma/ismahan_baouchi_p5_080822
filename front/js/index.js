@@ -7,7 +7,7 @@ fetch("http://localhost:3000/api/products")
     .then((objetProduits) => {
         console.log(objetProduits);
         afficherProduitsInnerHtml(objetProduits);
-    })``
+        })
     .catch((err) => {
         document.querySelector("#cartAndFormContainer").innerHTML = "<h1>erreur 404</h1>";
         console.log("erreur 404, sur ressource api: " + err);

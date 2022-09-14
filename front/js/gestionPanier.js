@@ -1,5 +1,4 @@
 
-
 function savePanier(panier) {
     localStorage.setItem("panier", JSON.stringify(panier))
 }
@@ -28,7 +27,7 @@ function removeFromPanier(produit) {
     let panier = getPanier()
     // a tester 
     // panier.filter(p => p.id !== produit.id && p => p.color !== produit.color)
-    panier = panier.filter(p => p.trueId != produit.id)
+    panier = panier.filter(p => p.id != produit.id)
     savePanier(panier)
 }
 
@@ -36,9 +35,9 @@ function removeFromPanier(produit) {
 function addQuantity(produit) {
     let panier = getPanier()
     //console.log(panier)
-    let findProduit = panier.find(p => p.trueId == produit.id)
+    let findProduit = panier.find(p => p.id == produit.id)
     if (findProduit  != undefined) {
-        findProduit.quantity = produit.quantity
+        findProduit.quantite = produit.quantite
     }
     savePanier(panier)
 }
