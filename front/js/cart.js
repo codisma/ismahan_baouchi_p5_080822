@@ -207,7 +207,7 @@ function chooseRegex(element) {
     return [noSpaceCharacters,noSpaceCharactersMessage ]
 }
  
-document.getElementById("#order").addEventListener("click", (e) => {
+document.getElementById("order").addEventListener("click", (e) => {
     const areAllInputIsVAlid = spaceInput.every(checkInput)
     if (!areAllInputIsVAlid) {
         e.preventDefault()
@@ -226,17 +226,7 @@ const body = {
     }, 
     products: getIdsFromCart (cart)
 }
-fetch("http://localhost:3000/api/products/order",{
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body:JSON.stringify(body)
-})
-.then((response)=> response.json)
-.then((data) => {
-    console.log (data)
-})
+fetch("http://localhost:3000/api/products/order")
 }
 function getIdsFromCart (cart) {
     const ids = []
@@ -252,12 +242,7 @@ function getIdsFromCart (cart) {
 function showErrorMessage ( element, regex, errorMessage,errorspan){
     errorspan.innerText = regex.test(element.value) ? "" : errorMessage
 }
-function createCart(){
-    const cart=[]
 
-
-
-}
 
 
 
