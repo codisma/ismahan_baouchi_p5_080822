@@ -347,7 +347,7 @@ cartorderform.addEventListener("submit",(e) => {
 
 
 ///////////////////////////////// fetch post ////////////////////////
-
+let reponseServers = [];
 fetch("http://localhost:3000/api/products/order", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -356,7 +356,7 @@ fetch("http://localhost:3000/api/products/order", {
 
 .then((res) => res.json())
 .then ((promise) =>{
-    let reponseServers = promise;
+    reponseServers = promise;
     console.log(reponseServers)
 
 const dataCommande = { 
@@ -373,9 +373,22 @@ if(commandeProducts == null) {
     localStorage.setItem("commandes", JSON.stringify(commandeProducts));
 }
 
-localStorage.removeItem("produit");
+localStorage.removeItem("panier");
 location.href = "confirmation.html";
 });
+
+firstName.value = "",
+lastName.value = "",
+email.value = "",
+address.value = "",
+city.value = "",
+valueAddress = null ;
+valueCity = null;
+valueFirstName = null;
+valuelastName = null;
+valueEmail = null;
+
+
 } else {
     alert ( "remplir le formulaire correctement")
 }
