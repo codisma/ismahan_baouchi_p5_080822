@@ -1,4 +1,3 @@
-
 // récupération du LocalStorage
 let localPanier = getPanier();
 //recupération de l'API
@@ -80,10 +79,11 @@ function GestionQuantity() {
         let input = itemQuantity[i];
         input.addEventListener("change", (event) => {
             let input = event.target;
-
+           // console.log(input.attributes['data-color'].value);
             let quantity = event.target.closest('.itemQuantity').value
             let quantityNumber = parseInt(quantity)
             let item = event.target.closest('[data-id]')
+            let couleur = input.attributes['data-color'].value
             let product = item.dataset
 
             if (input.value <= 0) {
@@ -93,7 +93,8 @@ function GestionQuantity() {
 
                 productID = {
                     id: product.id,
-                    quantite: quantityNumber
+                    quantite: quantityNumber,
+                    couleur : couleur
                 }
                 console.log(productID)
 
@@ -152,7 +153,16 @@ function AffichagetotalProduit() {
 function deleteProduct() {
     document.querySelectorAll(".deleteItem").forEach(item => item.addEventListener("click", (e) => {
         let deletItem = e.target.closest('[data-id]')
-        let product = deletItem.dataset
+
+        id = deletItem.attributes['data-id'].value
+        couleur = deletItem.attributes['data-color'].value
+
+        product = {
+            id: id,            
+            couleur : couleur
+        }
+        
+        
         removeFromPanier(product)
         window.location.assign("cart.html")
     }));
