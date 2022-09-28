@@ -5,11 +5,11 @@
 fetch("http://localhost:3000/api/products")
     .then((res) => res.json())
     .then((objetProduits) => {
-        console.log(objetProduits);
+        //console.log(objetProduits);
         afficherProduitsInnerHtml(objetProduits);
-        })
+    })
     .catch((err) => {
-        document.querySelector("#cartAndFormContainer").innerHTML = "<h1>erreur 404</h1>";
+        document.querySelector("#items").innerHTML ="<h1>Suite à un problème technique, les produits sont indisponibles pour le moment, désolé pour la gêne occasionnée,veuillez revenir ultérieurement</h1>";
         console.log("erreur 404, sur ressource api: " + err);
     });
 //--------------------------------------------
@@ -36,7 +36,7 @@ function afficherProduitsInnerHtml(produits) {
 function afficherProduitsCreateElement(produits) {
     for (let article of produits) {
         let productLink = document.createElement("a");
-        productLink.href = './product.html?id=' + article._id;
+        productLink.href = './product.html?_id=' + article._id;
 
         let productArticle = document.createElement("article");
 
@@ -56,7 +56,7 @@ function afficherProduitsCreateElement(produits) {
         productArticle.appendChild(productText);
         productArticle.appendChild(productTitle);
         productLink.appendChild(productArticle);
-        
+
         document.getElementById("items").appendChild(productLink);
 
     }
